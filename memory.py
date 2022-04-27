@@ -49,11 +49,12 @@ compt = 0
 deck = Shuffle(1)
 deck.deckShuffle()
 choixTaille = 0
-while(deck.deckLen()%2 > 0 and choixTaille < 4) :
-    choixTaille = int(input("Veuillez choisir le nombre de cartes pour le jeu (Plus de 4) : "))
+while(deck.deckLen() % 2 > 0 or choixTaille < 4) :
+    choixTaille = int(input("Veuillez choisir le nombre de cartes pour le jeu (Plus de 4 et un multiple de 2 uniquement) : "))
     deck = Shuffle(choixTaille)
 deck.deckShuffle()    
 moduloPrint = 4
+ok = False
 
 while(choixTaille % moduloPrint > 0) :
     moduloPrint += 1
@@ -72,8 +73,15 @@ while(scoreJ1 + scoreJ2 < deck.deckLen()):
     print("")
     print("Joueur 1 joue.")
     choix = int(input("Veuillez choisir la carte à retourner. : "))
-    while(deck.deckCard(choix-1, False) == " ") :
-        choix = int(input("Ce numéro n'est pas valide. Veuillez choisir la carte à retourner. : "))
+    while(ok == False) :
+        while(choix > deck.deckLen()) :
+            choix = int(input("Ce numéro est trop grand par rapport au nombre de cartes. Veuillez choisir la carte à retourner. : "))
+        if(choix-1 <= deck.deckLen()) :
+            if(deck.deckCard(choix-1, False) == " " or choix < 1) :
+                choix = int(input("Ce numéro n'est pas valide. Veuillez choisir la carte à retourner. : "))
+            else :
+                ok = True
+    ok = False
     deck.deckCard(choix-1, False).retourne()
     compt = 0
     for i in range(sizePrint):
@@ -87,8 +95,15 @@ while(scoreJ1 + scoreJ2 < deck.deckLen()):
         print("")
     print("")
     choix2 = int(input("Veuillez choisir la carte à retourner. : "))
-    while(deck.deckCard(choix-1, False) == " ") :
-        choix2 = int(input("Ce numéro n'est pas valide. Veuillez choisir la carte à retourner. : "))
+    while(ok == False) :
+        while(choix2 > deck.deckLen()) :
+            choix2 = int(input("Ce numéro est trop grand par rapport au nombre de cartes. Veuillez choisir la carte à retourner. : "))
+        if(choix2-1 <= deck.deckLen()) :
+            if(deck.deckCard(choix2-1, False) == " " or choix2 == choix or choix2 < 1) :
+                choix2 = int(input("Ce numéro n'est pas valide. Veuillez choisir la carte à retourner. : "))
+            else :
+                ok = True
+    ok = False
     deck.deckCard(choix2-1, False).retourne()
     compt = 0
     for i in range(sizePrint):
@@ -109,56 +124,70 @@ while(scoreJ1 + scoreJ2 < deck.deckLen()):
         deck.deckCard(choix-1, False).retourne()
         deck.deckCard(choix2-1, False).retourne()
     compt = 0
-    for i in range(sizePrint):
-        for j in range(moduloPrint) :
-            if(isinstance(deck.deckCard(compt, False), Carte)):
-                print(deck.deckCard(compt, False).affiche(), end="")
-                compt = compt+1
-            else:
-                print(deck.deckCard(compt, False), end="")
-                compt = compt+1
+    if(scoreJ1 + scoreJ2 < deck.deckLen()) :
+        for i in range(sizePrint):
+            for j in range(moduloPrint) :
+                if(isinstance(deck.deckCard(compt, False), Carte)):
+                    print(deck.deckCard(compt, False).affiche(), end="")
+                    compt = compt+1
+                else:
+                    print(deck.deckCard(compt, False), end="")
+                    compt = compt+1
+            print("")
         print("")
-    print("")
-    print("Joueur 2 joue.")
-    choix = int(input("Veuillez choisir la carte à retourner. : "))
-    while(deck.deckCard(choix-1, False) == " ") :
-        choix = int(input("Ce numéro n'est pas valide. Veuillez choisir la carte à retourner. : "))
-    deck.deckCard(choix-1, False).retourne()
-    compt = 0
-    for i in range(sizePrint):
-        for j in range(moduloPrint) :
-            if(isinstance(deck.deckCard(compt, False), Carte)):
-                print(deck.deckCard(compt, False).affiche(), end="")
-                compt = compt+1
-            else:
-                print(deck.deckCard(compt, False), end="")
-                compt = compt+1
-        print("")
-    print("")
-    choix2 = int(input("Veuillez choisir la carte à retourner. : "))
-    while(deck.deckCard(choix-1, False) == " ") :
-        choix2 = int(input("Ce numéro n'est pas valide. Veuillez choisir la carte à retourner. : "))
-    deck.deckCard(choix2-1, False).retourne()
-    compt = 0
-    for i in range(sizePrint):
-        for j in range(moduloPrint) :
-            if(isinstance(deck.deckCard(compt, False), Carte)):
-                print(deck.deckCard(compt, False).affiche(), end="")
-                compt = compt+1
-            else:
-                print(deck.deckCard(compt, False), end="")
-                compt = compt+1
-        print("")
-    print("")
-    compt = 0
-    if deck.deckCard(choix-1, False).affiche() == deck.deckCard(choix2-1, False).affiche():
-        scoreJ2 += 2
-        deck.deckCard(choix-1, True)
-        deck.deckCard(choix-1, True)
-
-    else:
+        print("Joueur 2 joue.")
+        choix = int(input("Veuillez choisir la carte à retourner. : "))
+        while(ok == False) :
+            while(choix > deck.deckLen()) :
+                choix = int(input("Ce numéro est trop grand par rapport au nombre de cartes. Veuillez choisir la carte à retourner. : "))
+            if(choix-1 <= deck.deckLen()) :
+                if(deck.deckCard(choix-1, False) == " " or choix < 1) :
+                    choix = int(input("Ce numéro n'est pas valide. Veuillez choisir la carte à retourner. : "))
+                else :
+                    ok = True
+        ok = False
         deck.deckCard(choix-1, False).retourne()
+        compt = 0
+        for i in range(sizePrint):
+            for j in range(moduloPrint) :
+                if(isinstance(deck.deckCard(compt, False), Carte)):
+                    print(deck.deckCard(compt, False).affiche(), end="")
+                    compt = compt+1
+                else:
+                    print(deck.deckCard(compt, False), end="")
+                    compt = compt+1
+            print("")
+        print("")
+        choix2 = int(input("Veuillez choisir la carte à retourner. : "))
+        while(ok == False) :
+            while(choix2 > deck.deckLen()) :
+                choix2 = int(input("Ce numéro est trop grand par rapport au nombre de cartes. Veuillez choisir la carte à retourner. : "))
+            if(choix2-1 <= deck.deckLen()) :
+                if(deck.deckCard(choix2-1, False) == " " or choix2 == choix or choix2 < 1) :
+                    choix2 = int(input("Ce numéro n'est pas valide. Veuillez choisir la carte à retourner. : "))
+                else :
+                    ok = True
+        ok = False
         deck.deckCard(choix2-1, False).retourne()
+        compt = 0
+        for i in range(sizePrint):
+            for j in range(moduloPrint) :
+                if(isinstance(deck.deckCard(compt, False), Carte)):
+                    print(deck.deckCard(compt, False).affiche(), end="")
+                    compt = compt+1
+                else:
+                    print(deck.deckCard(compt, False), end="")
+                    compt = compt+1
+            print("")
+        print("")
+        compt = 0
+        if deck.deckCard(choix-1, False).affiche() == deck.deckCard(choix2-1, False).affiche():
+            scoreJ2 += 2
+            deck.deckCard(choix-1, True)
+            deck.deckCard(choix2-1, True)
+        else:
+            deck.deckCard(choix-1, False).retourne()
+            deck.deckCard(choix2-1, False).retourne()
 
 if(scoreJ1 < scoreJ2):
     print("Joueur 2 a gagné avec", scoreJ2, "points.")
@@ -166,4 +195,3 @@ elif(scoreJ1 > scoreJ2):
     print("Joueur 1 a gagné avec", scoreJ1, "points.")
 else:
     print("C'est une égalité entre les deux joueurs avec", scoreJ1, "points")
-    
